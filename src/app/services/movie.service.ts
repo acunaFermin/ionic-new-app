@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { DetalleActores, DetallePelicula, Pelicula, RespuestaMovieDB } from '../interfaces/interfaces';
+import { BusquedaResponse, DetalleActores, DetallePelicula, Pelicula, RespuestaMovieDB } from '../interfaces/interfaces';
 
 
 const { url, api_key } = environment;
@@ -67,6 +67,12 @@ export class MovieService {
   getActoresPelicula( id:number ){
 
     return this.ejecutarQuery< DetalleActores >( `/movie/${ id }/credits?a=1` );
+
+  }
+  
+  buscarPelicula( textoBuscar:string ){
+
+    return this.ejecutarQuery< BusquedaResponse >( `/search/movie?query=${ textoBuscar }` );
 
   }
 }

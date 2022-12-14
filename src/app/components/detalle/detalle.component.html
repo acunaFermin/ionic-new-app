@@ -1,7 +1,7 @@
 <ion-content>
 
   <ion-label  class="titulo">
-    <h1>{{ pelicula.title }}</h1>
+    <h1>{{ pelicula?.title | titlecase }}</h1>
   </ion-label>
 
   <img [src]="pelicula.backdrop_path! | imagen" *ngIf="pelicula.backdrop_path">
@@ -12,7 +12,7 @@
       <ion-col size="4" class="poster-detalle-sobre">
         <ion-card class="poster">
           
-          <img  [src]="pelicula.poster_path! | imagen" class="poster" *ngIf="pelicula.poster_path" alt="">
+          <img  [src]="pelicula.poster_path! | imagen" class="poster" *ngIf="pelicula.poster_path">
         </ion-card>
       </ion-col>
 
@@ -68,7 +68,34 @@
     </ion-row>
   </ion-grid>
 
-  
 
+  <ion-slides [options]="slideOptActores">
+    <ion-slide *ngFor="let actor of actores" >
+      
+      <ion-card 
+        class="card-actor" >
+        <img *ngIf="actor.profile_path"  [src]="actor.profile_path! | imagen">
+        <img *ngIf="!actor.profile_path" src="assets/no-avatar.jpg">
+
+        <ion-label class="actor-name">{{ actor.name }}</ion-label>
+      </ion-card>
+
+    </ion-slide>
+  </ion-slides>
 
 </ion-content>
+
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button (click)="regresar()" slot="start">
+      <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+      <ion-label>Volver</ion-label>
+    </ion-button>
+    
+    <ion-button (click)="favorito()" slot="end">
+      <ion-icon slot="end" name="star-outline"></ion-icon>
+      <ion-label>Favorito</ion-label>
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>
