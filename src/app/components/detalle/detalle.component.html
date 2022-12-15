@@ -93,9 +93,14 @@
       <ion-label>Volver</ion-label>
     </ion-button>
     
-    <ion-button (click)="favorito()" slot="end">
+    <ion-button *ngIf="!favoritos" (click)="favorito()" slot="end">
       <ion-icon slot="end" name="star-outline"></ion-icon>
       <ion-label>Favorito</ion-label>
+    </ion-button>
+    
+    <ion-button *ngIf="favoritos" (click)="favorito()" slot="end">
+      <ion-icon slot="end" name="trash-outline"></ion-icon>
+      <ion-label>Remover</ion-label>
     </ion-button>
   </ion-toolbar>
 </ion-footer>

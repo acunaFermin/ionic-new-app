@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Cast, DetallePelicula } from 'src/app/interfaces/interfaces';
 import { MovieService } from 'src/app/services/movie.service';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-detalle',
@@ -15,6 +16,7 @@ export class DetalleComponent implements OnInit {
   pelicula!: DetallePelicula;
   actores: Cast[] = [];
   texto:number = 150;
+  favoritos = false;
 
   slideOptActores = {
     slidesPerView: 3.3,
@@ -24,14 +26,22 @@ export class DetalleComponent implements OnInit {
 
   constructor( 
     private movieService: MovieService,
-    private modalCtrl: ModalController 
+    private modalCtrl: ModalController ,
+    private storageService: StorageService
   ) { }
+
+  get peliculasFavoritas() {
+    return [ ...this.storageService.peliculas ]
+  }
 
   ngOnInit() {
 
     this.movieService.getPeliculaDetalle( this.id )
     .subscribe(resp => {
+      
       this.pelicula = resp;
+      this.favoritos = !!this.peliculasFavoritas.find( peli => peli.id === this.pelicula.id );
+
     })
     
     this.movieService.getActoresPelicula( this.id )
@@ -46,6 +56,9 @@ export class DetalleComponent implements OnInit {
     this.modalCtrl.dismiss();
   }
 
-  favorito(){}
+  favorito(){
+    this.favoritos = !this.favoritos;
+    this.storageService.guardarPelicula( this.pelicula );
+  }
 
 }
