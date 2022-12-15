@@ -17,6 +17,7 @@ export class DetalleComponent implements OnInit {
   actores: Cast[] = [];
   texto:number = 150;
   favoritos = false;
+  peliculasFavoritas: DetallePelicula[] = [];
 
   slideOptActores = {
     slidesPerView: 3.3,
@@ -30,25 +31,34 @@ export class DetalleComponent implements OnInit {
     private storageService: StorageService
   ) { }
 
-  get peliculasFavoritas() {
-    return [ ...this.storageService.peliculas ]
-  }
+  
 
   ngOnInit() {
 
-    this.movieService.getPeliculaDetalle( this.id )
-    .subscribe(resp => {
-      
-      this.pelicula = resp;
-      this.favoritos = !!this.peliculasFavoritas.find( peli => peli.id === this.pelicula.id );
 
-    })
+    this.storageService.cargarFavoritos().then((  ) => {  
+
+      this.peliculasFavoritas = [ ...this.storageService.peliculas ]
+
+      this.movieService.getPeliculaDetalle( this.id )
+      .subscribe(resp => {
+        
+        this.pelicula = resp;
+        this.favoritos = !!this.peliculasFavoritas.find( peli => peli.id === this.pelicula.id );
+  
+        console.log('favoritos',this.favoritos )
+  
+      });
+
+
+    });
+
+
     
     this.movieService.getActoresPelicula( this.id )
     .subscribe(resp => {
-      console.log(resp)
       this.actores = [ ...resp.cast ]
-    })
+    });
     
   }
 

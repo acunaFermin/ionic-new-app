@@ -15,11 +15,24 @@ export class StorageService {
     private storage: Storage,
     private toastCtrl: ToastController
   ) {
+
     this.init();
+
+    this.cargarFavoritos()
+    .catch(err => console.log(err))
+
   }
 
   get peliculas(){
     return [ ...this._peliculas ]
+  }
+
+  async cargarFavoritos(){
+
+    const peliculas = await this.storage.get('peliculas')
+   
+    this._peliculas = peliculas;
+
   }
 
   async showToast( mensaje: string ) {
